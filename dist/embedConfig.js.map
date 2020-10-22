@@ -1,0 +1,1 @@
+{"version":3,"file":"embedConfig.js","sourceRoot":"","sources":["../src/embedConfig.ts"],"names":[],"mappings":";AAAA,wBAAwB;AACxB,wBAAwB;;AAExB,MAAM,KAAK,GAAG;IACZ,aAAa,EAAE,SAAS;IACxB,aAAa,EAAE,SAAS;IACxB,aAAa,EAAE,WAAW;IAC1B,aAAa,EAAE,WAAW;IAC1B,WAAW,EAAE;;;mCAGoB;IACjC,MAAM,EAAE,8BAA8B;IACtC,KAAK,EAAE,MAAM;IACb,KAAK,EAAE,MAAM;CACd,CAAC;AAEF,kBAAe,KAAK,CAAC"}

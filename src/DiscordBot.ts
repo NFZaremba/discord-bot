@@ -1,9 +1,51 @@
-import { Client, Message } from "discord.js";
+import { CommandoClient } from "discord.js-commando";
+import path from "path";
+
+global.groupOne = [
+  {
+    id: "123123",
+    name: "Triton",
+    value: "Line1\nLine2\nLine3",
+  },
+  {
+    id: "23453245",
+    name: "Ariel",
+    value: "Line1\nLine2\nLine3",
+  },
+  {
+    id: "2345346",
+    name: "Ursula",
+    value: "Line1\nLine2\nLine3",
+  },
+];
+global.groupTwo = [
+  {
+    id: "w4563456",
+    name: "Mickey",
+    value: "Line1\nLine2\nLine3",
+  },
+  {
+    id: "35467435",
+    name: "Goofy",
+    value: "Line1\nLine2\nLine3",
+  },
+  {
+    id: "456756",
+    name: "Donald",
+    value: "Line1\nLine2\nLine3",
+  },
+];
+global.groupOneMsgId = null;
+global.groupTwoMsgId = null;
 
 export class DiscordBot {
   private static instance: DiscordBot;
-
-  private client: Client = new Client();
+  private token: string = process.env.DISCORD_TOKEN as string;
+  private prefix: string = process.env.prefix as string;
+  private client: CommandoClient = new CommandoClient({
+    owner: "696291949958922311",
+    commandPrefix: this.prefix,
+  });
 
   private constructor() {
     this.initializeClient();
@@ -13,16 +55,13 @@ export class DiscordBot {
     if (!DiscordBot.instance) {
       DiscordBot.instance = new DiscordBot();
     }
-
     return DiscordBot.instance;
   }
 
   async connect(): Promise<void> {
     try {
-      const res = this.client.login(process.env.DISCORD_TOKEN);
-      if (res) {
-        console.log("Connected to Discord");
-      }
+      await this.client.login(this.token);
+      console.log("Connected to Discord");
     } catch (err) {
       console.error(`Could not connect. Error: ${err.message}`);
     }
@@ -31,8 +70,9 @@ export class DiscordBot {
   private initializeClient(): void {
     if (!this.client) return;
 
+    this.registerCommands();
     this.setReadyHandler();
-    this.setMessageHandler();
+    //this.setMessageHandler();
   }
 
   private setReadyHandler(): void {
@@ -41,13 +81,36 @@ export class DiscordBot {
     });
   }
 
-  private setMessageHandler(): void {
-    this.client.on("message", async (message: Message) => {
-      if (message.author.bot) return;
+  //   private setMessageHandler(): void {
+  //     this.client.on("message", async (message: CommandMessage) => {
+  //       // filters out requests from bots and other prefixes
+  //       if (!message.content.startsWith(this.prefix) || message.author.bot)
+  //         return;
+  //       let args = message.content.slice(this.prefix?.length).trim().split(" ");
+  //       switch (args[0]) {
+  //         case "hello":
+  //           message.channel.send("Hello friend!");
+  //           break;
+  //         default:
+  //           return null;
+  //       }
+  //     });
+  //   }
 
-      if (message.content === "ping") {
-        await message.reply("Pong!");
-      }
-    });
+  private registerCommands(): void {
+    console.log(path.join(__dirname, "commands"));
+    this.client.registry
+      // Registers your custom command groups
+      .registerGroups([
+        ["mod", "mod commands"],
+        ["misc", "misc commands"],
+        ["team", "team commands"],
+      ])
+      // Registers all built-in groups, commands, and argument types
+      .registerDefaults()
+      // Registers all of your commands in the ./commands/ directory
+      .registerCommandsIn(path.join(__dirname, "commands"));
+
+    console.log("Registered commands");
   }
 }
