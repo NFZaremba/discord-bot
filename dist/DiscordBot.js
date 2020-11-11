@@ -15,42 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DiscordBot = void 0;
 const discord_js_commando_1 = require("discord.js-commando");
 const path_1 = __importDefault(require("path"));
-global.groupOne = [
-    {
-        id: "123123",
-        name: "Triton",
-        value: "Line1\nLine2\nLine3",
-    },
-    {
-        id: "23453245",
-        name: "Ariel",
-        value: "Line1\nLine2\nLine3",
-    },
-    {
-        id: "2345346",
-        name: "Ursula",
-        value: "Line1\nLine2\nLine3",
-    },
-];
-global.groupTwo = [
-    {
-        id: "w4563456",
-        name: "Mickey",
-        value: "Line1\nLine2\nLine3",
-    },
-    {
-        id: "35467435",
-        name: "Goofy",
-        value: "Line1\nLine2\nLine3",
-    },
-    {
-        id: "456756",
-        name: "Donald",
-        value: "Line1\nLine2\nLine3",
-    },
-];
-global.groupOneMsgId = null;
-global.groupTwoMsgId = null;
+const defaultTeams_1 = require("./__mock__/defaultTeams");
+global.teamGold = defaultTeams_1.teamGold;
+global.teamBlue = defaultTeams_1.teamBlue;
+global.teamGoldMsgId = null;
+global.teamBlueMsgId = null;
 class DiscordBot {
     constructor() {
         this.token = process.env.DISCORD_TOKEN;

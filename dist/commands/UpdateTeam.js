@@ -20,9 +20,9 @@ const parseTeams_1 = __importDefault(require("../helpers/parseTeams"));
 class UpdateTeam extends discord_js_commando_1.Command {
     constructor(client) {
         super(client, {
-            name: "update_team",
+            name: "update",
             group: "team",
-            memberName: "update_team",
+            memberName: "update",
             description: "Update team",
             argsType: "multiple",
         });
@@ -34,7 +34,7 @@ class UpdateTeam extends discord_js_commando_1.Command {
             // check team
             const isGroupOne = message.member.roles.cache.find((r) => r.name.toLowerCase().includes("gold"));
             // set team
-            const teamGroup = isGroupOne ? global.groupOne : global.groupTwo;
+            const teamGroup = isGroupOne ? global.teamGold : global.teamBlue;
             // check if user already registered team
             if (teamGroup.find((team) => team.userName.includes(message.author.username))) {
                 return message.channel
@@ -51,26 +51,24 @@ class UpdateTeam extends discord_js_commando_1.Command {
             ];
             // update global state
             if (isGroupOne) {
-                global.groupOne = payload;
+                global.teamGold = payload;
             }
             else {
-                global.groupTwo = payload;
+                global.teamBlue = payload;
             }
             const newEmbed = new discord_js_1.MessageEmbed()
-                .setColor(`${isGroupOne ? config_1.groupOne.color : config_1.groupTwo.color}`)
-                .setTitle(`${isGroupOne ? config_1.groupOne.title : config_1.groupTwo.title}`)
+                .setColor(`${isGroupOne ? config_1.teamGoldConfig.color : config_1.teamBlueConfig.color}`)
+                .setTitle(`${isGroupOne ? config_1.teamGoldConfig.title : config_1.teamBlueConfig.title}`)
                 .setURL("https://discord.js.org/")
                 .setAuthor("New Club Conquest", "https://i.imgur.com/wSTFkRM.png", "https://discord.js.org")
-                .setDescription(config_1.groupCommon.description)
+                .setDescription(config_1.teamCommonConfig.description)
                 .setThumbnail("https://i.imgur.com/wSTFkRM.png")
-                .addFields(iterateTeams_1.default(isGroupOne ? global.groupOne : global.groupTwo))
+                .addFields(iterateTeams_1.default(isGroupOne ? global.teamGold : global.teamBlue))
                 .setImage("https://i.imgur.com/wSTFkRM.png")
                 .setTimestamp()
-                .setFooter(`12 ${config_1.groupCommon.footer}`, "https://i.imgur.com/wSTFkRM.png");
-            const fetched = yield message.channel.messages.fetch(`${isGroupOne ? global.groupOneMsgId : global.groupTwoMsgId}`);
+                .setFooter(`12 ${config_1.teamCommonConfig.footer}`, "https://i.imgur.com/wSTFkRM.png");
+            const fetched = yield message.channel.messages.fetch(`${isGroupOne ? global.teamGoldMsgId : global.teamBlueMsgId}`);
             fetched.edit(newEmbed);
-            console.log(global.groupOne);
-            console.log(global.groupTwo);
             return null;
         });
     }

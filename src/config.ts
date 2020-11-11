@@ -1,19 +1,28 @@
 // Group One is 'Gold Crew'
 // Group Two is 'Blue Crew'
 
-export interface CCGroupCommonConfig {
+import { OffenseTeam } from "./types";
+import { teamBlue, teamGold } from "./__mock__/defaultTeams";
+
+export interface TeamEmbeddConfig {
+  color: string;
+  title: string;
+  role: string;
   description: string;
   footer: string;
 }
 
-export interface CCGroupConfig extends CCGroupCommonConfig {
+export interface TeamConfig {
+  pinnedMsgId: string | null;
   name: string;
-  color: string;
-  title: string;
-  role: string;
+  embedd: TeamEmbeddConfig;
+  teams: OffenseTeam[];
 }
 
-export const groupCommon: CCGroupCommonConfig = {
+export const teamCommonConfig: Pick<
+  TeamEmbeddConfig,
+  "description" | "footer"
+> = {
   description: `-new_team (admins): resets blue and gold teams\n
   -add_team: adds user teams to their respective groups (Gold Crew or Blue Crew)\n
   -update_team: edit your teams\n
@@ -22,21 +31,29 @@ export const groupCommon: CCGroupCommonConfig = {
 };
 
 // gold
-export const groupOne: CCGroupConfig = {
+export const teamGoldConfig: TeamConfig = {
+  pinnedMsgId: null,
   name: "gold",
-  color: "#817e03",
-  title: "Gold Crew",
-  description: groupCommon.description,
-  role: "gold",
-  footer: groupCommon.footer,
+  embedd: {
+    color: "#817e03",
+    title: "Gold Crew",
+    description: teamCommonConfig.description,
+    role: "gold",
+    footer: teamCommonConfig.footer,
+  },
+  teams: teamGold,
 };
 
 // blue
-export const groupTwo: CCGroupConfig = {
+export const teamBlueConfig: TeamConfig = {
+  pinnedMsgId: null,
   name: "blue",
-  color: "#06057f",
-  title: "Blue Crew",
-  description: groupCommon.description,
-  role: "blue",
-  footer: groupCommon.footer,
+  embedd: {
+    color: "#06057f",
+    title: "Blue Crew",
+    description: teamCommonConfig.description,
+    role: "blue",
+    footer: teamCommonConfig.footer,
+  },
+  teams: teamBlue,
 };

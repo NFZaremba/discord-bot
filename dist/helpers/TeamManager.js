@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = require("./config");
-const parseTeams_1 = __importDefault(require("./helpers/parseTeams"));
-const EmbedMessage_1 = __importDefault(require("./EmbedMessage"));
+const config_1 = require("../config");
+const parseTeams_1 = __importDefault(require("./parseTeams"));
+const EmbedMessage_1 = __importDefault(require("../EmbedMessage"));
 // This class will handle all operations for managing teams
 // ex. parsing, fetching, setting tea, etc.
 class TeamManager {
@@ -23,26 +23,26 @@ class TeamManager {
         this.message = message;
         this.messageArgs = args;
         this.userGroup = this.setUserGroup();
-        this.groupOneConfig = config_1.groupOneConfig;
-        this.groupTwoConfig = config_1.groupTwoConfig;
+        this.groupOneConfig = config_1.teamGoldConfig;
+        this.groupTwoConfig = config_1.teamBlueConfig;
     }
     newTeam() {
-        if (global.groupOneMsgId || global.groupTwoMsgId) {
+        if (global.teamGoldMsgId || global.teamBlueMsgId) {
             return this.message.channel
                 .send("You already created new teams")
                 .then((msg) => msg.delete({ timeout: 1000 }));
         }
-        const groupOneEmbedd = new EmbedMessage_1.default(this.groupOneConfig, global.groupOne);
-        const groupTwoEmbedd = new EmbedMessage_1.default(this.groupTwoConfig, global.groupTwo);
+        const groupOneEmbedd = new EmbedMessage_1.default(this.groupOneConfig, global.teamGold);
+        const groupTwoEmbedd = new EmbedMessage_1.default(this.groupTwoConfig, global.teamBlue);
         console.log(groupOneEmbedd);
         console.log(groupTwoEmbedd);
         // set pinned message id's to global variable
         this.message.channel.send(groupOneEmbedd).then((msg) => {
-            global.groupOneMsgId = msg.id;
+            global.teamGoldMsgId = msg.id;
             msg.pin();
         });
         this.message.channel.send(groupTwoEmbedd).then((msg) => {
-            global.groupTwoMsgId = msg.id;
+            global.teamBlueMsgId = msg.id;
             msg.pin();
         });
     }
@@ -68,8 +68,8 @@ class TeamManager {
             let updatedEmbed;
             // update global state
             if (this.userIsGroupOne()) {
-                global.groupOne = updatedGroup;
-                updatedEmbed = new EmbedMessage_1.default(this.groupOneConfig, global.groupOne);
+                global.teamGold = updatedGroup;
+                updatedEmbed = new EmbedMessage_1.default(this.groupOneConfig, global.teamGold);
                 //   embed = this.createEmbedMessage(
                 //     this.groupOneConfig.color,
                 //     groupOne.title,
@@ -77,15 +77,15 @@ class TeamManager {
                 //   );
             }
             else {
-                global.groupTwo = updatedGroup;
-                updatedEmbed = new EmbedMessage_1.default(this.groupTwoConfig, global.groupTwo);
+                global.teamBlue = updatedGroup;
+                updatedEmbed = new EmbedMessage_1.default(this.groupTwoConfig, global.teamBlue);
                 //   embed = this.createEmbedMessage(
                 //     this.groupTwoConfig.color,
                 //     groupTwo.title,
                 //     [...global.groupTwo, ...payload]
                 //   );
             }
-            const fetched = yield this.message.channel.messages.fetch(`${this.userIsGroupOne() ? global.groupOneMsgId : global.groupTwoMsgId}`);
+            const fetched = yield this.message.channel.messages.fetch(`${this.userIsGroupOne() ? global.teamGoldMsgId : global.teamBlueMsgId}`);
             fetched.edit(updatedEmbed);
         });
     }
@@ -130,14 +130,14 @@ class TeamManager {
     //   }
     userIsGroupOne() {
         var _a, _b, _c;
-        return (_c = (_b = (_a = this.message) === null || _a === void 0 ? void 0 : _a.member) === null || _b === void 0 ? void 0 : _b.roles) === null || _c === void 0 ? void 0 : _c.cache.find((r) => r.name.toLowerCase().includes(config_1.groupOneConfig.role));
+        return (_c = (_b = (_a = this.message) === null || _a === void 0 ? void 0 : _a.member) === null || _b === void 0 ? void 0 : _b.roles) === null || _c === void 0 ? void 0 : _c.cache.find((r) => r.name.toLowerCase().includes(config_1.teamGoldConfig.role));
     }
     setUserGroup() {
         if (this.userIsGroupOne()) {
-            return global.groupOne;
+            return global.teamGold;
         }
         else {
-            return global.groupTwo;
+            return global.teamBlue;
         }
     }
 }

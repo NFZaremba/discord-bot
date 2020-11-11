@@ -1,17 +1,16 @@
-import { group } from "console";
 import { Message, MessageEmbed, Role } from "discord.js";
 import { Command, CommandoClient, CommandoMessage } from "discord.js-commando";
-import { groupOne, groupTwo, groupCommon } from "../config";
+import { teamGoldConfig, teamBlueConfig, teamCommonConfig } from "../config";
 import iterateTeams from "../helpers/iterateTeams";
 import parseTeams from "../helpers/parseTeams";
-import { UserTeams } from "../types";
+import { OffenseTeam } from "../types";
 
 export default class UpdateTeam extends Command {
   public constructor(client: CommandoClient) {
     super(client, {
-      name: "update_team",
+      name: "update",
       group: "team",
-      memberName: "update_team",
+      memberName: "update",
       description: "Update team",
       argsType: "multiple",
     });
@@ -30,7 +29,7 @@ export default class UpdateTeam extends Command {
     );
 
     // set team
-    const teamGroup = isGroupOne ? global.groupOne : global.groupTwo;
+    const teamGroup = isGroupOne ? global.teamGold : global.teamBlue;
 
     // check if user already registered team
     if (
@@ -41,7 +40,7 @@ export default class UpdateTeam extends Command {
         .then((msg) => msg.delete({ timeout: 1000 }));
     }
 
-    const payload: UserTeams[] = [
+    const payload: OffenseTeam[] = [
       ...teamGroup,
       {
         id: message.author.id,
@@ -52,33 +51,35 @@ export default class UpdateTeam extends Command {
 
     // update global state
     if (isGroupOne) {
-      global.groupOne = payload;
+      global.teamGold = payload;
     } else {
-      global.groupTwo = payload;
+      global.teamBlue = payload;
     }
 
     const newEmbed: MessageEmbed = new MessageEmbed()
-      .setColor(`${isGroupOne ? groupOne.color : groupTwo.color}`)
-      .setTitle(`${isGroupOne ? groupOne.title : groupTwo.title}`)
+      .setColor(`${isGroupOne ? teamGoldConfig.color : teamBlueConfig.color}`)
+      .setTitle(`${isGroupOne ? teamGoldConfig.title : teamBlueConfig.title}`)
       .setURL("https://discord.js.org/")
       .setAuthor(
         "New Club Conquest",
         "https://i.imgur.com/wSTFkRM.png",
         "https://discord.js.org"
       )
-      .setDescription(groupCommon.description)
+      .setDescription(teamCommonConfig.description)
       .setThumbnail("https://i.imgur.com/wSTFkRM.png")
-      .addFields(iterateTeams(isGroupOne ? global.groupOne : global.groupTwo))
+      .addFields(iterateTeams(isGroupOne ? global.teamGold : global.teamBlue))
       .setImage("https://i.imgur.com/wSTFkRM.png")
       .setTimestamp()
-      .setFooter(`12 ${groupCommon.footer}`, "https://i.imgur.com/wSTFkRM.png");
+      .setFooter(
+        `12 ${teamCommonConfig.footer}`,
+        "https://i.imgur.com/wSTFkRM.png"
+      );
 
     const fetched = await message.channel.messages.fetch(
-      `${isGroupOne ? global.groupOneMsgId : global.groupTwoMsgId}`
+      `${isGroupOne ? global.teamGoldMsgId : global.teamBlueMsgId}`
     );
     fetched.edit(newEmbed);
-    console.log(global.groupOne);
-    console.log(global.groupTwo);
+
     return null;
   }
 }

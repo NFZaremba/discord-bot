@@ -1,12 +1,13 @@
+import { TeamConfig } from "./config";
+
 export {};
 
 declare global {
   namespace NodeJS {
     export interface Global {
-      groupOne: Array<any>;
-      groupTwo: Array<any>;
-      groupOneMsgId: string | null;
-      groupTwoMsgId: string | null;
+      conquest: {
+        [key: string]: TeamConfig;
+      };
     }
   }
 }

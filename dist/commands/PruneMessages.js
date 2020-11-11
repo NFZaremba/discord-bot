@@ -10,6 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_commando_1 = require("discord.js-commando");
+/*
+  Prune Messages
+
+  This command will delete all or a specified number of messages
+  it will not however delete any pinned messages
+*/
 class PruneMessages extends discord_js_commando_1.Command {
     constructor(client) {
         super(client, {
@@ -22,21 +28,24 @@ class PruneMessages extends discord_js_commando_1.Command {
     }
     clear() {
         // clear
-        global.groupOne = [];
-        global.groupTwo = [];
-        global.groupOneMsgId = null;
-        global.groupTwoMsgId = null;
+        // global.groupOne = [];
+        // global.groupTwo = [];
+        global.teamGoldMsgId = null;
+        global.teamBlueMsgId = null;
     }
     run(message, args) {
         return __awaiter(this, void 0, void 0, function* () {
             message.delete();
             if (message.channel.type === "dm")
                 return null;
+            // fetch messages
             const fetched = yield message.channel.messages.fetch({
                 limit: parseInt(args) || 100,
             });
+            // filter out pinned messages
+            const notPinned = fetched.filter((msg) => !msg.pinned);
             return message.channel
-                .bulkDelete(fetched)
+                .bulkDelete(notPinned)
                 .then((messages) => {
                 // clear
                 this.clear();

@@ -1,27 +1,27 @@
 import { Message } from "discord.js";
 import { Command, CommandoClient, CommandoMessage } from "discord.js-commando";
+import { teamBlue, teamGold } from "../__mock__/defaultTeams";
 
 /*
-  Prune Messages
+  Reset Teams
 
-  This command will delete all or a specified number of messages
-  it will not however delete any pinned messages
+  This command will reset the teams to default values and delete all messages inlcuding pinned messages
 */
-export default class PruneMessages extends Command {
+export default class ResetTeams extends Command {
   public constructor(client: CommandoClient) {
     super(client, {
-      name: "prune",
+      name: "reset",
       group: "mod",
-      memberName: "prune",
-      description: "prune messages in channel",
+      memberName: "reset",
+      description: "reset teams and deletes all messages in channel",
       argsType: "single",
     });
   }
 
   public clear() {
     // clear
-    // global.groupOne = [];
-    // global.groupTwo = [];
+    global.teamGold.teams = teamGold;
+    global.teamBlue.teams = teamBlue;
     global.teamGoldMsgId = null;
     global.teamBlueMsgId = null;
   }
@@ -39,11 +39,8 @@ export default class PruneMessages extends Command {
       limit: parseInt(args) || 100,
     });
 
-    // filter out pinned messages
-    const notPinned = fetched.filter((msg) => !msg.pinned);
-
     return message.channel
-      .bulkDelete(notPinned)
+      .bulkDelete(fetched)
       .then((messages) => {
         // clear
         this.clear();

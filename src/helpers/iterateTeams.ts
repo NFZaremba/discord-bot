@@ -1,9 +1,9 @@
 import { EmbedFieldData } from "discord.js";
-import { UserTeams } from "../types";
+import { OffenseTeam } from "../types";
 
-const iterateTeams = (cachedTeams: UserTeams[]) => {
+const iterateTeams = (cachedTeams: OffenseTeam[]) => {
   const teams = cachedTeams.map(
-    (team: UserTeams): EmbedFieldData => {
+    (team: OffenseTeam): EmbedFieldData => {
       return {
         name: team.name,
         value: team.value,

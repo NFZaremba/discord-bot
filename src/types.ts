@@ -1,5 +1,5 @@
 import { EmbedFieldData } from "discord.js";
 
-export interface UserTeams extends EmbedFieldData {
+export interface OffenseTeam extends EmbedFieldData {
   id?: string;
 }

@@ -1,47 +1,23 @@
 import { CommandoClient } from "discord.js-commando";
 import path from "path";
+import { teamBlueConfig, teamGoldConfig } from "./config";
 
-global.groupOne = [
-  {
-    id: "123123",
-    name: "Triton",
-    value: "Line1\nLine2\nLine3",
-  },
-  {
-    id: "23453245",
-    name: "Ariel",
-    value: "Line1\nLine2\nLine3",
-  },
-  {
-    id: "2345346",
-    name: "Ursula",
-    value: "Line1\nLine2\nLine3",
-  },
-];
-global.groupTwo = [
-  {
-    id: "w4563456",
-    name: "Mickey",
-    value: "Line1\nLine2\nLine3",
-  },
-  {
-    id: "35467435",
-    name: "Goofy",
-    value: "Line1\nLine2\nLine3",
-  },
-  {
-    id: "456756",
-    name: "Donald",
-    value: "Line1\nLine2\nLine3",
-  },
-];
-global.groupOneMsgId = null;
-global.groupTwoMsgId = null;
+// set global variables
+// use database in the future
+// global.teamGold = teamGoldConfig;
+// global.teamBlue = teamBlueConfig;
+// global.teamGoldMsgId = null;
+// global.teamBlueMsgId = null;
+
+global.conquest = {
+  teamGold: teamGoldConfig,
+  teamBlue: teamBlueConfig,
+};
 
 export class DiscordBot {
   private static instance: DiscordBot;
-  private token: string = process.env.DISCORD_TOKEN as string;
-  private prefix: string = process.env.prefix as string;
+  private readonly token: string = process.env.DISCORD_TOKEN as string;
+  private readonly prefix: string = process.env.prefix as string;
   private client: CommandoClient = new CommandoClient({
     owner: "696291949958922311",
     commandPrefix: this.prefix,
